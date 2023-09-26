@@ -7,9 +7,9 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ categories }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light fw-bolder">
       <div className="container px-4 px-lg-5">
-        <a className="navbar-brand" href="#!">
+        <a className="navbar-brand" href=".">
           Bookshelf Vault
         </a>
         <button
@@ -26,23 +26,23 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#!">
+              <a className="nav-link fw-bolder" aria-current="page" href=".">
                 Home
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#register">
+              <a className="nav-link fw-bolder" href="#register">
                 Register
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#login">
+              <a className="nav-link fw-bolder" href="#login">
                 Login
               </a>
             </li>
             <li className="nav-item dropdown">
               <a
-                className="nav-link dropdown-toggle"
+                className="nav-link dropdown-toggle fw-bolder"
                 id="navbarDropdown"
                 href="#"
                 role="button"

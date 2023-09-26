@@ -15,7 +15,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({ options }) => {
   return (
     <Dropdown>
       <Dropdown.Toggle variant="primary" id="dropdown-basic">
-        {selectedOption || "Search books based on category"}
+        {selectedOption || "Categories"}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>

@@ -15,9 +15,13 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
     <div>
       <div className="col mb-5">
-        <div className="card h-100">
-          <img className="card-img-top" src={book.thumbnail} />
-          <div className="card-body p-4">
+        <div className="card">
+          <img
+            className="card-img-top"
+            src={book.thumbnail}
+            style={{ height: "350px" }}
+          />
+          <div className="card-body" style={{ height: "200px" }}>
             <div className="text-center">
               <h5 className="fw-bolder">{book.title}</h5>
               <h6 className="fw-bolder">by</h6>

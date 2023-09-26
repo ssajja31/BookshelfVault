@@ -1,5 +1,6 @@
 import React from "react";
 import { Category } from "../../models/category";
+import "./Navbar.css";
 
 interface NavbarProps {
   categories: Category[];

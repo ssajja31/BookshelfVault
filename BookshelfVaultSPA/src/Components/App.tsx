@@ -3,7 +3,6 @@ import Catalog from "./Catalog/Catalog";
 import Header from "./Header/Header";
 import BookCard from "./BookCard/BookCard";
 import Footer from "./Footer/Footer";
-import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {

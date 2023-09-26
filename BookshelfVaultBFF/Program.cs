@@ -1,4 +1,5 @@
 using BookshelfVaultBFF.Data;
+using BookshelfVaultBFF.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<BookContext>(options =>
 });
 
 builder.Services.AddCors();
+
+builder.Services.AddSingleton<IBooksService, BooksService>();
 
 var app = builder.Build();
 

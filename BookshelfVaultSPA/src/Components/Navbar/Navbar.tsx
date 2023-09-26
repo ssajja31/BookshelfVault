@@ -1,6 +1,11 @@
 import React from "react";
+import { Category } from "../../models/category";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  categories: Category[];
+}
+
+const Navbar: React.FC<NavbarProps> = ({ categories }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container px-4 px-lg-5">
@@ -47,21 +52,13 @@ const Navbar: React.FC = () => {
                 Categories
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a className="dropdown-item" href="#!">
-                    Category 1
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#!">
-                    Category 2
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#!">
-                    Category 3
-                  </a>
-                </li>
+                {categories.map((category) => (
+                  <li>
+                    <a className="dropdown-item" href="#!">
+                      {category.name}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </li>
           </ul>

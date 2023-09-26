@@ -1,16 +1,18 @@
 import React from "react";
 import { Category } from "../../models/category";
 import "./Navbar.css";
+import { useCart } from "../../context/CartContext";
 
 interface NavbarProps {
   categories: Category[];
 }
 
 const Navbar: React.FC<NavbarProps> = ({ categories }) => {
+  const { openCart, cartQuantity } = useCart();
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fw-bolder">
       <div className="container px-4 px-lg-5">
-        <a className="navbar-brand" href=".">
+        <a className="navbar-brand" href="/">
           Bookshelf Vault
         </a>
         <button
@@ -27,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href=".">
+              <a className="nav-link" aria-current="page" href="/">
                 Home
               </a>
             </li>
@@ -64,13 +66,19 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
             </li>
           </ul>
           <form className="d-flex">
-            <a className="btn btn-outline-dark" href="viewCart">
-              <i className="bi-cart-fill me-1"></i>
-              Cart
-              <span className="badge bg-dark text-white ms-1 rounded-pill">
-                0
-              </span>
-            </a>
+            {cartQuantity >= 0 && (
+              <button
+                className="btn btn-outline-dark"
+                onClick={openCart}
+                type="button"
+              >
+                <i className="bi-cart-fill me-1"></i>
+                Cart
+                <span className="badge bg-dark text-white ms-1 rounded-pill">
+                  {cartQuantity}
+                </span>
+              </button>
+            )}
           </form>
         </div>
       </div>

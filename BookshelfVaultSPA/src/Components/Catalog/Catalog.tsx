@@ -1,4 +1,4 @@
-import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { Book } from "../../models/book";
 import BookCard from "../BookCard/BookCard";
 

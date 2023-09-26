@@ -14,7 +14,7 @@ const Header: React.FC = () => {
               Welcome to the Bookshelf Vault!
             </h1>
             <p className="lead fw-normal text-white-50 mb-0">
-              A book store e-commerce site
+              A book e-commerce site
             </p>
           </div>
         </div>

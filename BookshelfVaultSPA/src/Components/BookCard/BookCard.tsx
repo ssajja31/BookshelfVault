@@ -7,13 +7,14 @@ const BookCard: React.FC = () => {
         <div className="card h-100">
           <img
             className="card-img-top"
-            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-            alt="..."
+            src="http://books.google.com/books/content?id=7vs2DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           />
           <div className="card-body p-4">
             <div className="text-center">
-              <h5 className="fw-bolder">Book 1</h5>
-              $2.50
+              <h5 className="fw-bolder">In Defence of Science</h5>
+              <h6 className="fw-bolder">by</h6>
+              <h5 className="fw-bolder">Jack W. Grove</h5>
+              $32.95
             </div>
           </div>
           <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">

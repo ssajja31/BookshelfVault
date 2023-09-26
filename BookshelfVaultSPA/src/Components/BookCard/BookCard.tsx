@@ -6,6 +6,12 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
+  let counter = 0;
+  function addToCart() {
+    counter++;
+    console.log(counter);
+  }
+
   return (
     <div>
       <div className="col mb-5">
@@ -21,9 +27,12 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           </div>
           <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div className="text-center">
-              <a className="btn btn-outline-dark mt-auto" href="#">
+              <button
+                className="btn btn-outline-dark mt-auto"
+                onClick={addToCart}
+              >
                 Add to cart
-              </a>
+              </button>
             </div>
           </div>
         </div>

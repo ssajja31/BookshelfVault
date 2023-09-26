@@ -26,23 +26,23 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             <li className="nav-item">
-              <a className="nav-link fw-bolder" aria-current="page" href=".">
+              <a className="nav-link" aria-current="page" href=".">
                 Home
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link fw-bolder" href="#register">
+              <a className="nav-link" href="register">
                 Register
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link fw-bolder" href="#login">
+              <a className="nav-link" href="login">
                 Login
               </a>
             </li>
             <li className="nav-item dropdown">
               <a
-                className="nav-link dropdown-toggle fw-bolder"
+                className="nav-link dropdown-toggle"
                 id="navbarDropdown"
                 href="#"
                 role="button"
@@ -63,13 +63,13 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
             </li>
           </ul>
           <form className="d-flex">
-            <button className="btn btn-outline-dark" type="submit">
+            <a className="btn btn-outline-dark" href="viewCart">
               <i className="bi-cart-fill me-1"></i>
               Cart
               <span className="badge bg-dark text-white ms-1 rounded-pill">
                 0
               </span>
-            </button>
+            </a>
           </form>
         </div>
       </div>

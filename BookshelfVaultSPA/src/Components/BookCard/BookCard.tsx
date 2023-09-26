@@ -1,20 +1,22 @@
 import React from "react";
+import { Book } from "../../models/book";
 
-const BookCard: React.FC = () => {
+interface BookCardProps {
+  book: Book;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
     <div>
       <div className="col mb-5">
         <div className="card h-100">
-          <img
-            className="card-img-top"
-            src="http://books.google.com/books/content?id=7vs2DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          />
+          <img className="card-img-top" src={book.thumbnail} />
           <div className="card-body p-4">
             <div className="text-center">
-              <h5 className="fw-bolder">In Defence of Science</h5>
+              <h5 className="fw-bolder">{book.title}</h5>
               <h6 className="fw-bolder">by</h6>
-              <h5 className="fw-bolder">Jack W. Grove</h5>
-              $32.95
+              <h5 className="fw-bolder">{book.author}</h5>
+              {book.price}
             </div>
           </div>
           <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">

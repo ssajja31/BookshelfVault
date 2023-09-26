@@ -1,14 +1,19 @@
 import React from "react";
 import { useCart } from "../../context/CartContext";
 import { Book } from "../../models/book";
+import agent from "../../Api/agent";
 
 interface BookCardProps {
   book: Book;
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
-  const { getItemQuantity, addToCart } = useCart();
-  const quantity = getItemQuantity(book.id);
+  //const { getItemQuantity, addToCart } = useCart();
+  //const quantity = getItemQuantity(book.id);
+
+  function addBookToCart(bookId: string) {
+    agent.Cart.addItem(bookId).catch((error) => console.log(error));
+  }
 
   return (
     <div>
@@ -28,14 +33,12 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           </div>
           <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div className="text-center mt-auto">
-              {quantity === 0 ? (
-                <button
-                  className="btn btn-outline-dark mt-auto w-100"
-                  onClick={() => addToCart(book.id)}
-                >
-                  Add to cart
-                </button>
-              ) : null}
+              <button
+                className="btn btn-outline-dark mt-auto w-100"
+                onClick={() => addBookToCart(book.id)}
+              >
+                Add to cart
+              </button>
             </div>
           </div>
         </div>

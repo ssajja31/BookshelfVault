@@ -18,7 +18,7 @@ namespace BookshelfVaultBFF.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetCart")]
         public async Task<ActionResult<CartDto>> GetCart()
         {
             var cart = await FetchCart();
@@ -28,24 +28,11 @@ namespace BookshelfVaultBFF.Controllers
                 return NotFound();
             }
 
-            return new CartDto
-            {
-                Id = cart.Id,
-                BuyerId = cart.BuyerId,
-                Items = cart.Items.Select(item => new ItemDto
-                {
-                    BookId = item.BookId,
-                    Title = item.Book.Title,
-                    Price = item.Book.Price,
-                    Thumbanil = item.Book.Thumbnail,
-                    Author = item.Book.Author,
-                    Quantity = item.Book.Quantity
-                }).ToList(),
-            };
+            return MapCartToCardDto(cart);
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddItemToCart(string bookId, int quantity)
+        public async Task<ActionResult<CartDto>> AddItemToCart(string bookId, int quantity)
         {
             var cart = await FetchCart();
 
@@ -65,7 +52,7 @@ namespace BookshelfVaultBFF.Controllers
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return Ok();
+            if (result) return CreatedAtRoute("GetCart", MapCartToCardDto(cart));
 
             return BadRequest();
         }
@@ -83,7 +70,7 @@ namespace BookshelfVaultBFF.Controllers
         private Cart CreateCart()
         {
             var buyerId = Guid.NewGuid().ToString();
-            var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
+            var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30), SameSite = SameSiteMode.None, Secure = false };
             Response.Cookies.Append("buyerId", buyerId, cookieOptions);
 
             var cart = new Cart { BuyerId = buyerId };
@@ -91,6 +78,24 @@ namespace BookshelfVaultBFF.Controllers
             _context.Carts.Add(cart);
 
             return cart;
+        }
+
+        private CartDto MapCartToCardDto(Cart cart)
+        {
+            return new CartDto
+            {
+                Id = cart.Id,
+                BuyerId = cart.BuyerId,
+                Items = cart.Items.Select(item => new ItemDto
+                {
+                    BookId = item.BookId,
+                    Title = item.Book.Title,
+                    Price = item.Book.Price,
+                    Thumbanil = item.Book.Thumbnail,
+                    Author = item.Book.Author,
+                    Quantity = item.Book.Quantity
+                }).ToList(),
+            };
         }
     }
 }

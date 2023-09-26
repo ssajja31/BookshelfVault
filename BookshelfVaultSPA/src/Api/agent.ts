@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-axios.defaults.baseURL = "http://localhost:7267/api/";
+axios.defaults.baseURL = "https://localhost:7267/api/";
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -21,12 +22,18 @@ const requests = {
 };
 
 const Catalog = {
-  books: () => requests.get("books"),
-  categories: () => requests.get("categories"),
+  books: () => requests.get("Books"),
+  categories: () => requests.get("Categories"),
 };
 
+const Cart = {
+  get: () => requests.get("Cart"),
+  addItem: (bookId: string, quantity = 1) =>
+    requests.post(`Cart?bookId=${bookId}&quantity=${quantity}`, {}),
+};
 const agent = {
   Catalog,
+  Cart,
 };
 
 export default agent;

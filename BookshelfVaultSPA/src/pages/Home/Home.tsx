@@ -6,21 +6,22 @@ import Catalog from "../../Components/Catalog/Catalog";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
 import Navbar from "../../Components/Navbar/Navbar";
+import agent from "../../Api/agent";
 
 const Home: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    fetch("https://localhost:7267/api/Books")
-      .then((response) => response.json())
-      .then((data) => setBooks(data));
+    agent.Catalog.books()
+      .then((books) => setBooks(books))
+      .catch((error) => console.log(error));
   }, []);
 
   useEffect(() => {
-    fetch("https://localhost:7267/api/Categories")
-      .then((response) => response.json())
-      .then((data) => setCategories(data));
+    agent.Catalog.categories()
+      .then((categories) => setCategories(categories))
+      .catch((error) => console.log(error));
   }, []);
 
   return (

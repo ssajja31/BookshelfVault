@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Category } from "../../models/category";
 import { useCart } from "../../hooks/CartContext";
 import "./Navbar.css";
+import { useAppDispatch, useAppSelector } from "../../Reducers/configureStore";
+import { setCategory } from "../../Reducers/CatalogSlice";
 
 interface NavbarProps {
   categories: Category[];
@@ -10,17 +12,15 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ categories }) => {
   const { openCart } = useCart();
-  const [totalItemsCount, setTotalItemsCount] = useState<number | null>(null);
-  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
-  // set below to dynamically update cart value
-  useEffect(() => {
-    setTotalItemsCount(5);
-  }, []);
+  const { cart } = useAppSelector((state) => state.cart);
+
+  const itemsCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0);
 
   // update query string to specify category based on below
-  const handleCategoryClick = (categoryName: string) => {
-    setCurrentCategory(categoryName);
+  const handleCategoryClick = (categoryId: number) => {
+    dispatch(setCategory(categoryId));
   };
 
   return (
@@ -74,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
                     <button className={"dropdown-item"}>
                       <button
                         className={"dropdown-item"}
-                        onClick={() => handleCategoryClick(category.name)}
+                        onClick={() => handleCategoryClick(category.categoryId)}
                       >
                         {category.name}
                       </button>
@@ -93,7 +93,7 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
               <i className="bi-cart-fill me-1"></i>
               Cart
               <span className="badge bg-dark text-white ms-1 rounded-pill">
-                {totalItemsCount}
+                {itemsCount}
               </span>
             </button>
           </form>

@@ -60,7 +60,6 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           </div>
           <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div className="text-center mt-auto">
-              <div className="fw-bolder w-100">x{quantity}</div>
               <button
                 className="btn btn-outline-dark mt-auto w-100"
                 onClick={() => addToCart(book.id)}

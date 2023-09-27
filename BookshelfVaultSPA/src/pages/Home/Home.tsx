@@ -7,10 +7,20 @@ import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
 import Navbar from "../../Components/Navbar/Navbar";
 import agent from "../../Api/agent";
+import { useAppSelector } from "../../Reducers/configureStore";
 
 const Home: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const { categoryId } = useAppSelector((state) => state.catalog);
+
+  useEffect(() => {
+    if (categoryId != null) {
+      agent.Catalog.booksByCategoryId(categoryId)
+        .then((books) => setBooks(books))
+        .catch((error) => console.log(error));
+    }
+  }, [categoryId]);
 
   useEffect(() => {
     agent.Catalog.books()

@@ -24,6 +24,8 @@ const requests = {
 const Catalog = {
   books: () => requests.get("Books"),
   categories: () => requests.get("Categories"),
+  booksByCategoryId: (categoryId: number) =>
+    requests.get(`Books/GetBooksByCategory/${categoryId}`),
 };
 
 const Cart = {

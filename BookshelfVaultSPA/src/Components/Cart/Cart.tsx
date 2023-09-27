@@ -1,4 +1,4 @@
-import { Col, Container, Offcanvas, Row, Stack } from "react-bootstrap";
+import { Col, Offcanvas, Stack } from "react-bootstrap";
 import { useCart } from "../../hooks/CartContext";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "../../models/shoppingCart";
@@ -20,7 +20,10 @@ export default function Cart({ isCartOpen }: CartProps) {
       .finally(() => setLoading(false));
   }, []);
 
-  const totalItemsCount = cart?.items.length;
+  const totalItemsCount = cart?.items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   return (
     <Offcanvas show={isCartOpen} onHide={closeCart} placement="end">

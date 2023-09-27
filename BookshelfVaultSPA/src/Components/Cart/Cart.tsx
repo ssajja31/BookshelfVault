@@ -68,7 +68,9 @@ export default function Cart({ isCartOpen }: CartProps) {
         <p className="ms-auto fw-bold fs-5">
           Total Items in Cart: {totalItemsCount}
         </p>
-        <p className="ms-auto fw-bold fs-5">Total Price: {totalPrice}</p>
+        <p className="ms-auto fw-bold fs-5">
+          Total Price: ${totalPrice?.toFixed(2)}
+        </p>
       </Offcanvas.Body>
     </Offcanvas>
   );

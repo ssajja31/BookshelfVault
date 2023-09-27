@@ -11,11 +11,17 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ categories }) => {
   const { openCart } = useCart();
   const [totalItemsCount, setTotalItemsCount] = useState<number | null>(null);
+  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
 
   // set below to dynamically update cart value
   useEffect(() => {
     setTotalItemsCount(5);
   }, []);
+
+  // update query string to specify category based on below
+  const handleCategoryClick = (categoryName: string) => {
+    setCurrentCategory(categoryName);
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fw-bolder">
@@ -65,7 +71,14 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 {categories.map((category) => (
                   <li key={category.categoryId}>
-                    <button className={"dropdown-item"}>{category.name}</button>
+                    <button className={"dropdown-item"}>
+                      <button
+                        className={"dropdown-item"}
+                        onClick={() => handleCategoryClick(category.name)}
+                      >
+                        {category.name}
+                      </button>
+                    </button>
                   </li>
                 ))}
               </ul>

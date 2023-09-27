@@ -26,7 +26,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Navbar categories={categories} />
+      <Navbar categories={categories} totalItemsCount={0} />
       <Header
         headerText="Welcome to the Bookshelf Vault!"
         subText="A book e-commerce site"

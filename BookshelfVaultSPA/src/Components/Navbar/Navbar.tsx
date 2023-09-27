@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Category } from "../../models/category";
+import { useCart } from "../../hooks/CartContext";
 import "./Navbar.css";
-import { useCart } from "../../context/CartContext";
 
 interface NavbarProps {
   categories: Category[];
+  totalItemsCount: number;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ categories }) => {
-  const { openCart, cartQuantity } = useCart();
+  const { openCart } = useCart();
+  const [totalItemsCount, setTotalItemsCount] = useState<number | null>(null);
+
+  // set below to dynamically update cart value
+  useEffect(() => {
+    setTotalItemsCount(5);
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fw-bolder">
       <div className="container px-4 px-lg-5">
@@ -56,29 +64,25 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 {categories.map((category) => (
-                  <li>
-                    <a className="dropdown-item" href="#!">
-                      {category.name}
-                    </a>
+                  <li key={category.categoryId}>
+                    <button className={"dropdown-item"}>{category.name}</button>
                   </li>
                 ))}
               </ul>
             </li>
           </ul>
           <form className="d-flex">
-            {cartQuantity >= 0 && (
-              <button
-                className="btn btn-outline-dark"
-                onClick={openCart}
-                type="button"
-              >
-                <i className="bi-cart-fill me-1"></i>
-                Cart
-                <span className="badge bg-dark text-white ms-1 rounded-pill">
-                  {cartQuantity}
-                </span>
-              </button>
-            )}
+            <button
+              className="btn btn-outline-dark"
+              onClick={openCart}
+              type="button"
+            >
+              <i className="bi-cart-fill me-1"></i>
+              Cart
+              <span className="badge bg-dark text-white ms-1 rounded-pill">
+                {totalItemsCount}
+              </span>
+            </button>
           </form>
         </div>
       </div>

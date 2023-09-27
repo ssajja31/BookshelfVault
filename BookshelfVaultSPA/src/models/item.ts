@@ -2,7 +2,7 @@ export interface Item {
   bookId: string;
   title: string;
   price: number;
-  thumbanil: string;
+  thumbnail: string;
   author: string;
   quantity: number;
 }

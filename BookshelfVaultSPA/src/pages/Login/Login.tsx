@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   }, []);
   return (
     <>
-      <Navbar categories={categories} />
+      <Navbar categories={categories} totalItemsCount={0} />
       <Header headerText="Login Page" subText="" />
       <div
         className="py-5 background"

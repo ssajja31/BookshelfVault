@@ -1,5 +1,4 @@
-import React from "react";
-import { useCart } from "../../context/CartContext";
+import React, { useState } from "react";
 import { Book } from "../../models/book";
 import agent from "../../Api/agent";
 
@@ -7,12 +6,40 @@ interface BookCardProps {
   book: Book;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ book }) => {
-  //const { getItemQuantity, addToCart } = useCart();
-  //const quantity = getItemQuantity(book.id);
+type CartItem = {
+  id: string;
+  quantity: number;
+};
 
-  function addBookToCart(bookId: string) {
-    agent.Cart.addItem(bookId).catch((error) => console.log(error));
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const quantity = getItemQuantity(book.id);
+
+  function getItemQuantity(id: string) {
+    const foundItem = cartItems.find((book) => book.id === id);
+    if (foundItem) {
+      return foundItem.quantity;
+    } else {
+      return 0;
+    }
+  }
+
+  function addToCart(id: string) {
+    agent.Cart.addItem(id).catch((error) => console.log(error));
+
+    setCartItems((currItems) => {
+      if (currItems.find((item) => item.id === id) == null) {
+        return [...currItems, { id, quantity: 1 }];
+      } else {
+        return currItems.map((item) => {
+          if (item.id === id) {
+            return { ...item, quantity: item.quantity + 1 };
+          } else {
+            return item;
+          }
+        });
+      }
+    });
   }
 
   return (
@@ -33,9 +60,10 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           </div>
           <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div className="text-center mt-auto">
+              <div className="fw-bolder w-100">x{quantity}</div>
               <button
                 className="btn btn-outline-dark mt-auto w-100"
-                onClick={() => addBookToCart(book.id)}
+                onClick={() => addToCart(book.id)}
               >
                 Add to cart
               </button>

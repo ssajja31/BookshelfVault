@@ -8,7 +8,7 @@
 
         public decimal Price { get; set; }
 
-        public string Thumbanil { get; set; }
+        public string Thumbnail { get; set; }
 
         public string Author { get; set; }
 

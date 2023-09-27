@@ -91,9 +91,9 @@ namespace BookshelfVaultBFF.Controllers
                     BookId = item.BookId,
                     Title = item.Book.Title,
                     Price = item.Book.Price,
-                    Thumbanil = item.Book.Thumbnail,
+                    Thumbnail = item.Book.Thumbnail,
                     Author = item.Book.Author,
-                    Quantity = item.Book.Quantity
+                    Quantity = item.Quantity
                 }).ToList(),
             };
         }

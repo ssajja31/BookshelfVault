@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Category } from "../../models/category";
 import { useCart } from "../../hooks/CartContext";
 import "./Navbar.css";
-import { useAppDispatch, useAppSelector } from "../../Reducers/configureStore";
+import { useAppDispatch } from "../../Reducers/configureStore";
 import { setCategory } from "../../Reducers/CatalogSlice";
+import { ShoppingCart } from "../../models/shoppingCart";
+import agent from "../../Api/agent";
 
 interface NavbarProps {
   categories: Category[];
@@ -14,11 +16,18 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
   const { openCart } = useCart();
   const dispatch = useAppDispatch();
 
-  const { cart } = useAppSelector((state) => state.cart);
+  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState<ShoppingCart | null>(null);
+
+  useEffect(() => {
+    agent.Cart.get()
+      .then((cart) => setCart(cart))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  }, []);
 
   const itemsCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0);
 
-  // update query string to specify category based on below
   const handleCategoryClick = (categoryId: number) => {
     dispatch(setCategory(categoryId));
   };
@@ -71,13 +80,11 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 {categories.map((category) => (
                   <li key={category.categoryId}>
-                    <button className={"dropdown-item"}>
-                      <button
-                        className={"dropdown-item"}
-                        onClick={() => handleCategoryClick(category.categoryId)}
-                      >
-                        {category.name}
-                      </button>
+                    <button
+                      className={"dropdown-item"}
+                      onClick={() => handleCategoryClick(category.categoryId)}
+                    >
+                      {category.name}
                     </button>
                   </li>
                 ))}

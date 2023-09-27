@@ -27,7 +27,16 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
   }
 
   function addToCart(id: string) {
-    agent.Cart.addItem(id).catch((error) => console.log(error));
+    agent.Cart.addItem(id).catch((error) => {
+      console.log(error);
+      toast.error(
+        `Sorry, there was a problem adding ${book.title} by ${book.author} to your cart`
+      );
+    });
+
+    toast.success(
+      `${book.title} by ${book.author} added to your cart successfully!`
+    );
 
     setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id) == null) {
@@ -42,8 +51,6 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         });
       }
     });
-
-    toast.success(`${book.title} By ${book.author} added successfully!`);
   }
 
   return (

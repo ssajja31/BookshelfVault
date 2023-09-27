@@ -25,6 +25,11 @@ export default function Cart({ isCartOpen }: CartProps) {
     0
   );
 
+  const totalPrice = cart?.items.reduce(
+    (sum, item) => sum + item.quantity * item.price,
+    0
+  );
+
   return (
     <Offcanvas show={isCartOpen} onHide={closeCart} placement="end">
       <Offcanvas.Header
@@ -48,10 +53,14 @@ export default function Cart({ isCartOpen }: CartProps) {
                     height: "120px",
                   }}
                 />
-                <div className="fw-bolder">
-                  {item.title} by {item.author}
+                <div>
+                  <span className="fw-bolder">{item.title}</span>
+                  <span> By </span>
+                  <span className="fw-bolder">{item.author}</span>
                 </div>
-                <div className="mb-5">x{item.quantity}</div>
+                <div className="mb-5">
+                  ${item.price} x{item.quantity}
+                </div>
               </Col>
             ))}
           </Stack>
@@ -59,6 +68,7 @@ export default function Cart({ isCartOpen }: CartProps) {
         <p className="ms-auto fw-bold fs-5">
           Total Items in Cart: {totalItemsCount}
         </p>
+        <p className="ms-auto fw-bold fs-5">Total Price: {totalPrice}</p>
       </Offcanvas.Body>
     </Offcanvas>
   );

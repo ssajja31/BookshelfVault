@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Book } from "../../models/book";
 import agent from "../../Api/agent";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface BookCardProps {
   book: Book;
@@ -40,6 +42,8 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         });
       }
     });
+
+    toast.success(`${book.title} By ${book.author} added successfully!`);
   }
 
   return (

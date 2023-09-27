@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { getCookie } from "../Helpers/helper";
 import agent from "../Api/agent";
 import { setShoppingCart } from "../Reducers/CartSlice";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </CartProvider>
   );
 }

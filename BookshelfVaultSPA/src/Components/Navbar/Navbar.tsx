@@ -56,16 +56,6 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
                 Home
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="register">
-                Register
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="login">
-                Login
-              </a>
-            </li>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -89,6 +79,16 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
                   </li>
                 ))}
               </ul>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="register">
+                Register
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="login">
+                Login
+              </a>
             </li>
           </ul>
           <form className="d-flex">

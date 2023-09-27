@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using BookshelfVaultBFF.Data;
 using BookshelfVaultBFF.DbModels;
 using System.Net.Http.Headers;
+using BookshelfVaultBFF.RequestHelpers;
+using System.Text.Json;
+using BookshelfVaultBFF.Extensions;
 
 namespace BookshelfVaultBFF.Controllers
 {
@@ -21,9 +24,14 @@ namespace BookshelfVaultBFF.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<PagedList<Book>>> GetBooks([FromQuery] PaginationParams paginationParams)
         {
-            return await _context.Books.ToListAsync();
+            var query = _context.Books.AsQueryable();
+            var books = await PagedList<Book>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationheader(books.MetaData);
+
+            return books;
         }
 
         // GET: api/Books/5

@@ -1,8 +1,6 @@
 import { Col, Offcanvas, Stack } from "react-bootstrap";
 import { useCart } from "../../hooks/CartContext";
-import { useEffect, useState } from "react";
-import { ShoppingCart } from "../../models/shoppingCart";
-import agent from "../../Api/agent";
+import { useAppSelector } from "../../Reducers/configureStore";
 
 type CartProps = {
   isCartOpen: boolean;
@@ -10,15 +8,7 @@ type CartProps = {
 
 export default function Cart({ isCartOpen }: CartProps) {
   const { closeCart } = useCart();
-  const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState<ShoppingCart | null>(null);
-
-  useEffect(() => {
-    agent.Cart.get()
-      .then((cart) => setCart(cart))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, []);
+  const { cart } = useAppSelector((state) => state.cart);
 
   const totalItemsCount = cart?.items.reduce(
     (sum, item) => sum + item.quantity,

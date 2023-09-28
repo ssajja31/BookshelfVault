@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { Category } from "../../models/category";
 import { useCart } from "../../hooks/CartContext";
 import "./Navbar.css";
-import { useAppDispatch } from "../../Reducers/configureStore";
+import { useAppDispatch, useAppSelector } from "../../Reducers/configureStore";
 import { setCategory } from "../../Reducers/CatalogSlice";
-import { ShoppingCart } from "../../models/shoppingCart";
-import agent from "../../Api/agent";
+import LoggedInMenu from "../LoggedInMenu/LoggedInMenu";
 
 interface NavbarProps {
   categories: Category[];
@@ -15,16 +13,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ categories }) => {
   const { openCart } = useCart();
   const dispatch = useAppDispatch();
-
-  const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState<ShoppingCart | null>(null);
-
-  useEffect(() => {
-    agent.Cart.get()
-      .then((cart) => setCart(cart))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, []);
+  const { user } = useAppSelector((state) => state.account);
+  const { cart } = useAppSelector((state) => state.cart);
 
   const itemsCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -80,16 +70,24 @@ const Navbar: React.FC<NavbarProps> = ({ categories }) => {
                 ))}
               </ul>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="register">
-                Register
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="login">
-                Login
-              </a>
-            </li>
+            {user ? (
+              <li className="nav-item">
+                <LoggedInMenu />
+              </li>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <a className="nav-link" href="register">
+                    Register
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="login">
+                    Login
+                  </a>
+                </li>
+              </>
+            )}
           </ul>
           <form className="d-flex">
             <button

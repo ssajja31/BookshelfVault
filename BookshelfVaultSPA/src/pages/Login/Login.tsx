@@ -5,14 +5,38 @@ import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
 import Navbar from "../../Components/Navbar/Navbar";
 import "../pages.css";
+import { FieldValues, useForm } from "react-hook-form";
+import { Form, FormControl } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../Reducers/configureStore";
+import { loginUser } from "../../Reducers/AccountSlice";
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm();
+
+  async function submitForm(data: FieldValues) {
+    try {
+      await dispatch(loginUser(data));
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     fetch("https://localhost:7267/api/Categories")
       .then((response) => response.json())
       .then((data) => setCategories(data));
   }, []);
+
   return (
     <>
       <Navbar categories={categories} totalItemsCount={0} />
@@ -39,40 +63,60 @@ const Login: React.FC = () => {
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
-                            <input
+                            <FormControl
                               type="text"
-                              id="form3Example1c"
                               className="form-control"
+                              {...register("username", {
+                                required: "User Name is required",
+                              })}
                             />
-                            <label
-                              className="form-label"
-                              htmlFor="form3Example1c"
-                            >
-                              Email
-                            </label>
+                            {!!errors.username && (
+                              <Form.Text style={{ color: "red" }}>
+                                Invalid User Name
+                              </Form.Text>
+                            )}
+                            {!!!errors.username && (
+                              <label
+                                className="form-label"
+                                htmlFor="form3Example1c"
+                              >
+                                User Name
+                              </label>
+                            )}
                           </div>
                         </div>
 
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
-                            <input
-                              type="email"
-                              id="form3Example3c"
+                            <FormControl
+                              type="password"
                               className="form-control"
+                              {...register("password", {
+                                required: "Password is required",
+                              })}
                             />
-                            <label
-                              className="form-label"
-                              htmlFor="form3Example3c"
-                            >
-                              Password
-                            </label>
+                            {!!errors.password && (
+                              <Form.Text style={{ color: "red" }}>
+                                Invalid Password
+                              </Form.Text>
+                            )}
+                            {!!!errors.password && (
+                              <label
+                                className="form-label"
+                                htmlFor="form3Example3c"
+                              >
+                                Password
+                              </label>
+                            )}
                           </div>
                         </div>
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                           <button
                             type="button"
                             className="btn btn-primary btn-lg"
+                            onClick={handleSubmit(submitForm)}
+                            disabled={!isValid}
                           >
                             Submit
                           </button>

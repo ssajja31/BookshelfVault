@@ -4,23 +4,26 @@ import Home from "../pages/Home/Home";
 import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
 import { useAppDispatch } from "../Reducers/configureStore";
-import { useEffect } from "react";
-import { getCookie } from "../Helpers/helper";
-import agent from "../Api/agent";
-import { setShoppingCart } from "../Reducers/CartSlice";
+import { useCallback, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
+import { fetchCurrentUser } from "../Reducers/AccountSlice";
+import { fetchCartAsync } from "../Reducers/CartSlice";
 
 function App() {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const buyerId = getCookie("buyerId");
-    if (buyerId) {
-      agent.Cart.get()
-        .then((cart) => () => dispatch(setShoppingCart(cart)))
-        .catch((error) => console.log(error));
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchCartAsync());
+    } catch (error) {
+      console.log(error);
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    initApp();
+  }, [initApp]);
 
   return (
     <CartProvider>

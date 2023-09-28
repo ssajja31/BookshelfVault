@@ -59,20 +59,38 @@ namespace BookshelfVaultBFF.Controllers
 
         private async Task<Cart> FetchCart()
         {
+            string buyerId = GetBuyerId();
+
+            if (string.IsNullOrWhiteSpace(buyerId))
+            {
+                Response.Cookies.Delete("buyerId");
+                return null;
+            }
+
             var cart = await _context.Carts
                             .Include(i => i.Items)
                             .ThenInclude(b => b.Book)
-                            .FirstOrDefaultAsync(c => c.BuyerId == Request.Cookies["buyerId"]);
+                            .FirstOrDefaultAsync(c => c.BuyerId == buyerId);
 
             return cart;
         }
 
+        private string GetBuyerId()
+        {
+            return User.Identity?.Name ?? Request.Cookies["buyerId"];
+        }
+
         private Cart CreateCart()
         {
-            var buyerId = Guid.NewGuid().ToString();
-            var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30), SameSite = SameSiteMode.None, Secure = false };
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            var buyerId = User.Identity?.Name;
 
+            if (string.IsNullOrEmpty(buyerId))
+            {
+                buyerId = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30), SameSite = SameSiteMode.None, Secure = false };
+                Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            }
+            
             var cart = new Cart { BuyerId = buyerId };
 
             _context.Carts.Add(cart);

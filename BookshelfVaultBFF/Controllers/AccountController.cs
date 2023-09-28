@@ -1,10 +1,12 @@
-﻿using BookshelfVaultBFF.DbModels;
+﻿using BookshelfVaultBFF.Data;
+using BookshelfVaultBFF.DbModels;
 using BookshelfVaultBFF.Dto;
 using BookshelfVaultBFF.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookshelfVaultBFF.Controllers
 {
@@ -14,12 +16,15 @@ namespace BookshelfVaultBFF.Controllers
     {
         private readonly UserManager<User> _userManager;
 
+        private readonly BookContext _context;
+
         private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService)
+        public AccountController(UserManager<User> userManager, ITokenService tokenService, BookContext context)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -32,10 +37,26 @@ namespace BookshelfVaultBFF.Controllers
                 return Unauthorized();
             }
 
+            var userCart = await FetchCart(loginDto.UserName);
+            var existingCart = await FetchCart(Request.Cookies["buyerId"]);
+
+            if (existingCart != null)
+            {
+                if (userCart != null)
+                {
+                    _context.Carts.Remove(userCart);
+                }
+
+                existingCart.BuyerId = user.UserName;
+                Response.Cookies.Delete("buyerId");
+                await _context.SaveChangesAsync();
+            }
+
             return new UserDto
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Cart = existingCart != null ? MapCartToCardDto(existingCart) : MapCartToCardDto(userCart),
             };
         }
 
@@ -71,6 +92,40 @@ namespace BookshelfVaultBFF.Controllers
             {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user)
+            };
+        }
+
+        private async Task<Cart> FetchCart(string buyerId)
+        {
+            if (string.IsNullOrWhiteSpace(buyerId))
+            {
+                Response.Cookies.Delete("buyerId");
+                return null;
+            }
+
+            var cart = await _context.Carts
+                            .Include(i => i.Items)
+                            .ThenInclude(b => b.Book)
+                            .FirstOrDefaultAsync(c => c.BuyerId == buyerId);
+
+            return cart;
+        }
+
+        private CartDto MapCartToCardDto(Cart cart)
+        {
+            return new CartDto
+            {
+                Id = cart.Id,
+                BuyerId = cart.BuyerId,
+                Items = cart.Items.Select(item => new ItemDto
+                {
+                    BookId = item.BookId,
+                    Title = item.Book.Title,
+                    Price = item.Book.Price,
+                    Thumbnail = item.Book.Thumbnail,
+                    Author = item.Book.Author,
+                    Quantity = item.Quantity
+                }).ToList(),
             };
         }
 

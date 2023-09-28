@@ -3,6 +3,7 @@ import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../Reducers/configureStore";
 import { logOut } from "../../Reducers/AccountSlice";
 import { useNavigate } from "react-router-dom";
+import { clearCart } from "../../Reducers/CartSlice";
 
 export default function LoggedInMenu() {
   const dispatch = useAppDispatch();
@@ -17,6 +18,7 @@ export default function LoggedInMenu() {
 
   const handleLogOut = () => {
     dispatch(logOut());
+    dispatch(clearCart());
     navigate("/");
   };
 

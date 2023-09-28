@@ -4,6 +4,7 @@ import agent from "../Api/agent";
 import { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { json } from "stream/consumers";
+import { setCart } from "./CartSlice";
 
 interface AccountState {
   user: User | null;
@@ -17,7 +18,9 @@ export const loginUser = createAsyncThunk<User, FieldValues>(
   "account/loginUser",
   async (data, thunkAPI) => {
     try {
-      const user = await agent.Account.login(data);
+      const userDto = await agent.Account.login(data);
+      const { cart, ...user } = userDto;
+      if (cart) thunkAPI.dispatch(setCart(cart));
       localStorage.setItem("user", JSON.stringify(user));
 
       return user;
@@ -32,7 +35,6 @@ export const registerUser = createAsyncThunk<User, FieldValues>(
   async (data, thunkAPI) => {
     try {
       return await agent.Account.register(data);
-      //localStorage.setItem("user", JSON.stringify(user));
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error });
     }
@@ -44,7 +46,9 @@ export const fetchCurrentUser = createAsyncThunk<User>(
   async (_, thunkAPI) => {
     thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
     try {
-      const user = await agent.Account.currentUser();
+      const userDto = await agent.Account.currentUser();
+      const { cart, ...user } = userDto;
+      if (cart) thunkAPI.dispatch(setCart(cart));
       localStorage.setItem("user", JSON.stringify(user));
 
       return user;

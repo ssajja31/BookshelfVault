@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Category } from "../models/category";
 
 interface CatalogState {
   categoryId: number | null;

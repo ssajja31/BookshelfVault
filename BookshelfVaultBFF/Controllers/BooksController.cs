@@ -34,45 +34,6 @@ namespace BookshelfVaultBFF.Controllers
             return books;
         }
 
-        // GET: api/Books/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(string id)
-        {
-            var book = await _context.Books.FindAsync(id);
-
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return book;
-        }
-
-        // POST: api/Books
-        [HttpPost]
-        public async Task<ActionResult<Book>> PostBook(Book book)
-        {
-            _context.Books.Add(book);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (BookExists(book.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetBook", new { id = book.Id }, book);
-        }
-
         [HttpGet("GetBooksByCategory/{categoryId}")]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooksByCategory(int categoryId)
         {

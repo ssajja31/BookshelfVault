@@ -6,7 +6,7 @@
 
         public int PageNumber { get; set; } = 1;
 
-        private int _pageSize { get; set; } = 10;
+        private int _pageSize { get; set; } = 100;
 
         public int PageSize 
         {
